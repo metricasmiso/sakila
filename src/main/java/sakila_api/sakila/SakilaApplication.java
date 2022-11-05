@@ -11,6 +11,8 @@ import sakila_api.sakila.dto.ActorDto;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 @SpringBootApplication
 @RestController
@@ -55,14 +57,20 @@ public class SakilaApplication {
 
 	@PatchMapping("/allActors/{id}/{firstName}")
 	public ResponseEntity<Actor> updateEmployeePartially(@PathVariable int id, @PathVariable String firstName) {
-		if (filmRepo.findById(id).isPresent()) {
-
-			Actor actor = actorRepo.findById(id).get();
-			actor.setActorFirstName(firstName);
-			return new ResponseEntity<Actor>(actorRepo.save(actor), HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		if (!Objects.isNull(filmRepo)) {
+			Optional<Film> optFilm = filmRepo.findById(id);
+			if (optFilm.isPresent()) {
+				if (!Objects.isNull(actorRepo)) {
+					Optional<Actor> optActor = actorRepo.findById(id);
+					if (optActor.isPresent()) {
+						Actor actor = actorRepo.findById(id).get();
+						actor.setActorFirstName(firstName);
+						return new ResponseEntity<Actor>(actorRepo.save(actor), HttpStatus.OK);
+					}
+				}
+			}
 		}
+		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 	@PutMapping("/allActors/{id}")
@@ -71,8 +79,8 @@ public class SakilaApplication {
 		Actor actor = actorRepo.findById(actorId)
 				.orElseThrow(() -> new ResourceNotFoundException("Actor not found for this id :: " + actorId));
 
-		actor.setActorFirstName(actorDetails.getActorFirstName());
-		actor.setActorLastName(actorDetails.getActorLastName());
+		actor.setActorFirstName(actorDetails.getFirstName());
+		actor.setActorLastName(actorDetails.getLastName());
 
 		actorRepo.save(actor);
 		return ResponseEntity.ok(actor);
@@ -112,13 +120,16 @@ public class SakilaApplication {
 	@PatchMapping("/allFilms/{id}/{title}")
 	public ResponseEntity<Film> updateFilmPartially(@PathVariable int id, @PathVariable String title) {
 
-			if (filmRepo.findById(id).isPresent()) {
-				Film film = filmRepo.findById(id).get();
+		if (!Objects.isNull(filmRepo)) {
+			Optional<Film> optFilm = filmRepo.findById(id);
+			if (optFilm.isPresent()) {
+				Film film = optFilm.get();
 				film.setTitle(title);
 				return new ResponseEntity<Film>(filmRepo.save(film), HttpStatus.OK);
-			} else {
-				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
+		}
+
+		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 	@PutMapping("/allFilms/{id}")
