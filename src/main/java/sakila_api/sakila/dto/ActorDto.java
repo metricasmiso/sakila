@@ -2,13 +2,13 @@ package sakila_api.sakila.dto;
 
 public class ActorDto {
 
-    int actorId;
-    String actorFirstName;
-    String actorLastName;
+    int Id;
+    String firstName;
+    String lastName;
     
-    public ActorDto (String actorFirstName, String actorLastName){
-        this.actorFirstName = actorFirstName;
-        this.actorLastName = actorLastName;
+    public ActorDto (String firstName, String lastName){
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
     public ActorDto(){
@@ -16,28 +16,28 @@ public class ActorDto {
     }
 
     //methods
-    public String getActorFirstName(){
-        return this.actorFirstName;
+    public String getFirstName(){
+        return this.firstName;
     }
 
-    public void setActorFirstName(String name){
-        this.actorFirstName = name;
+    public void setFirstName(String name){
+        this.firstName = name;
     }
 
-    public String getActorLastName() {
-        return actorLastName;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setActorLastName(String name){
-        this.actorLastName = name;
+    public void setLastName(String name){
+        this.lastName = name;
     }
 
-    public int getActorId(){
-        return this.actorId;
+    public int getId(){
+        return this.Id;
     }
 
-    public void setActorId(int id){
-        this.actorId = id;
+    public void setId(int id){
+        this.Id = id;
     }
 
 
