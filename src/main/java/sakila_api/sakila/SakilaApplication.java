@@ -87,8 +87,16 @@ public class SakilaApplication {
 	}
 
 	@PostMapping("/allActors")
-	public Actor createActor(@RequestBody Actor actor) {
+	public Actor createActor(@RequestBody ActorDto actorDto) {
+		
+		Actor actor = new Actor();
+		
+		actor.setActorId(actorDto.getId());
+		actor.setActorFirstName(actorDto.getFirstName());
+		actor.setActorLastName(actorDto.getLastName());
+		
 		return actorRepo.save(actor);
+		
 	}
 
 	@DeleteMapping("/allActors/{id}")
