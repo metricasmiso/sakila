@@ -63,7 +63,7 @@ public class SakilaApplication {
 				if (!Objects.isNull(actorRepo)) {
 					Optional<Actor> optActor = actorRepo.findById(id);
 					if (optActor.isPresent()) {
-						Actor actor = actorRepo.findById(id).get();
+						Actor actor = optActor.get();
 						actor.setActorFirstName(firstName);
 						return new ResponseEntity<Actor>(actorRepo.save(actor), HttpStatus.OK);
 					}

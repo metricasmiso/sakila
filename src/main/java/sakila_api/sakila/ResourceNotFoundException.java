@@ -1,6 +1,11 @@
 package sakila_api.sakila;
 
 public class ResourceNotFoundException extends Exception {
-    public ResourceNotFoundException(String s) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public ResourceNotFoundException(String s) {
     }
 }
