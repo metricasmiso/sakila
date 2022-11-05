@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import sakila_api.sakila.dto.ActorDto;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -65,7 +67,7 @@ public class SakilaApplication {
 
 	@PutMapping("/allActors/{id}")
 	public ResponseEntity<Actor> updateActor(@PathVariable(value = "id") int actorId,
-												   @RequestBody Actor actorDetails) throws ResourceNotFoundException {
+												   @RequestBody ActorDto actorDetails) throws ResourceNotFoundException {
 		Actor actor = actorRepo.findById(actorId)
 				.orElseThrow(() -> new ResourceNotFoundException("Actor not found for this id :: " + actorId));
 
