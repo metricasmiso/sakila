@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import sakila_api.sakila.dto.ActorDto;
+import sakila_api.sakila.dto.FilmDto;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -142,19 +143,19 @@ public class SakilaApplication {
 
 	@PutMapping("/allFilms/{id}")
 	public ResponseEntity<Film> updateFilm(@PathVariable(value = "id") int filmId,
-											 @RequestBody Film filmDetails) throws ResourceNotFoundException {
+											 @RequestBody FilmDto filmDetailsDto) throws ResourceNotFoundException {
 		Film film = filmRepo.findById(filmId)
 				.orElseThrow(() -> new ResourceNotFoundException("Film not found for this id :: " + filmId));
 
-		film.setTitle(filmDetails.getTitle());
-		film.setDescription(filmDetails.getDescription());
-		film.setLength(filmDetails.getLength());
-		film.setRating(filmDetails.getRating());
-		film.setLanguage_id(filmDetails.getLanguage_id());
-		film.setSpecial_features(filmDetails.getSpecial_features());
-		film.setReplacement_cost(filmDetails.getReplacement_cost());
-		film.setRental_rate(filmDetails.getRental_rate());
-		film.setRental_duration(filmDetails.getRental_duration());
+		film.setTitle(filmDetailsDto.getFilmTitle());
+		film.setDescription(filmDetailsDto.getFilmDescription());
+		film.setLength(filmDetailsDto.getFilmLength());
+		film.setRating(filmDetailsDto.getFilmRating());
+		film.setLanguage_id(filmDetailsDto.getFilmLanguage_id());
+		film.setSpecial_features(filmDetailsDto.getFilmSpecial_features());
+		film.setReplacement_cost(filmDetailsDto.getFilmReplacement_cost());
+		film.setRental_rate(filmDetailsDto.getFilmRental_rate());
+		film.setRental_duration(filmDetailsDto.getFilmRental_duration());
 
 		filmRepo.save(film);
 		return ResponseEntity.ok(film);
