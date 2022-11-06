@@ -1,8 +1,4 @@
 package sakila_api.sakila.dto;
-import javax.persistence.*;
-
-@Entity
-@Table(name="film")
 
 public class FilmDto {
 
