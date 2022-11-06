@@ -162,7 +162,19 @@ public class SakilaApplication {
 	}
 
 	@PostMapping("/allFilms")
-	public Film createFilm(@RequestBody Film film) {
+	public Film createFilm(@RequestBody FilmDto filmDto) {
+		Film film = new Film();
+		film.setDescription(filmDto.getFilmDescription());
+		film.setFilmId(filmDto.getId());
+		film.setLanguage_id(filmDto.getFilmLanguage_id());
+		film.setLength(filmDto.getFilmLength());
+		film.setRating(filmDto.getFilmRating());
+		film.setRelease_year(filmDto.getFilmRelease_year());
+		film.setRental_duration(filmDto.getFilmRental_duration());
+		film.setRental_rate(filmDto.getFilmRental_rate());
+		film.setReplacement_cost(filmDto.getFilmReplacement_cost());
+		film.setSpecial_features(filmDto.getFilmSpecial_features());
+		film.setTitle(filmDto.getFilmTitle());
 		return filmRepo.save(film);
 	}
 
