@@ -17,7 +17,7 @@ import java.util.Optional;
 
 @SpringBootApplication
 @RestController
-@CrossOrigin
+@CrossOrigin("trustedwebsite.com")
 @RequestMapping("/home")
 
 public class SakilaApplication {
