@@ -34,6 +34,8 @@ public class SakilaApplication {
 		this.filmRepo = exFilmRepo;
 		this.storeRepo = exStoreRepo;
 	}
+	
+	private static final String ACTOR_NOT_FOUND = "Actor not found for this id :: ";
 
 	public static void main(String[] args) {
 		SpringApplication.run(SakilaApplication.class, args);
@@ -52,7 +54,7 @@ public class SakilaApplication {
 	public ResponseEntity<Actor> getActorById(@PathVariable(value = "id") int actorId)
 			throws ResourceNotFoundException {
 		Actor actor = actorRepo.findById(actorId)
-				.orElseThrow(() -> new ResourceNotFoundException("Actor not found for this id :: " + actorId));
+				.orElseThrow(() -> new ResourceNotFoundException(ACTOR_NOT_FOUND + actorId));
 		return ResponseEntity.ok().body(actor);
 	}
 
@@ -78,7 +80,7 @@ public class SakilaApplication {
 	public ResponseEntity<Actor> updateActor(@PathVariable(value = "id") int actorId,
 												   @RequestBody ActorDto actorDetails) throws ResourceNotFoundException {
 		Actor actor = actorRepo.findById(actorId)
-				.orElseThrow(() -> new ResourceNotFoundException("Actor not found for this id :: " + actorId));
+				.orElseThrow(() -> new ResourceNotFoundException(ACTOR_NOT_FOUND + actorId));
 
 		actor.setActorFirstName(actorDetails.getFirstName());
 		actor.setActorLastName(actorDetails.getLastName());
@@ -104,7 +106,7 @@ public class SakilaApplication {
 	public Map<String, Boolean> deleteEmployee(@PathVariable(value = "id") int actorId)
 			throws ResourceNotFoundException {
 		Actor actor = actorRepo.findById(actorId)
-				.orElseThrow(() -> new ResourceNotFoundException("Actor not found for this id :: " + actorId));
+				.orElseThrow(() -> new ResourceNotFoundException(ACTOR_NOT_FOUND + actorId));
 
 		actorRepo.delete(actor);
 		Map<String, Boolean> response = new HashMap<>();
