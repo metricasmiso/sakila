@@ -7,13 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import sakila_api.sakila.dto.ActorDto;
-import sakila_api.sakila.dto.FilmDto;
-
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
 
 @SpringBootApplication
 @RestController
@@ -58,46 +53,32 @@ public class SakilaApplication {
 
 	@PatchMapping("/allActors/{id}/{firstName}")
 	public ResponseEntity<Actor> updateEmployeePartially(@PathVariable int id, @PathVariable String firstName) {
-		if (!Objects.isNull(filmRepo)) {
-			Optional<Film> optFilm = filmRepo.findById(id);
-			if (optFilm.isPresent()) {
-				if (!Objects.isNull(actorRepo)) {
-					Optional<Actor> optActor = actorRepo.findById(id);
-					if (optActor.isPresent()) {
-						Actor actor = optActor.get();
-						actor.setActorFirstName(firstName);
-						return new ResponseEntity<Actor>(actorRepo.save(actor), HttpStatus.OK);
-					}
-				}
-			}
+		if (filmRepo.findById(id).isPresent()) {
+
+			Actor actor = actorRepo.findById(id).get();
+			actor.setActorFirstName(firstName);
+			return new ResponseEntity<Actor>(actorRepo.save(actor), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 	@PutMapping("/allActors/{id}")
 	public ResponseEntity<Actor> updateActor(@PathVariable(value = "id") int actorId,
-												   @RequestBody ActorDto actorDetails) throws ResourceNotFoundException {
+												   @RequestBody Actor actorDetails) throws ResourceNotFoundException {
 		Actor actor = actorRepo.findById(actorId)
 				.orElseThrow(() -> new ResourceNotFoundException("Actor not found for this id :: " + actorId));
 
-		actor.setActorFirstName(actorDetails.getFirstName());
-		actor.setActorLastName(actorDetails.getLastName());
+		actor.setActorFirstName(actorDetails.getActorFirstName());
+		actor.setActorLastName(actorDetails.getActorLastName());
 
 		actorRepo.save(actor);
 		return ResponseEntity.ok(actor);
 	}
 
 	@PostMapping("/allActors")
-	public Actor createActor(@RequestBody ActorDto actorDto) {
-		
-		Actor actor = new Actor();
-		
-		actor.setActorId(actorDto.getId());
-		actor.setActorFirstName(actorDto.getFirstName());
-		actor.setActorLastName(actorDto.getLastName());
-		
+	public Actor createActor(@RequestBody Actor actor) {
 		return actorRepo.save(actor);
-		
 	}
 
 	@DeleteMapping("/allActors/{id}")
@@ -129,52 +110,37 @@ public class SakilaApplication {
 	@PatchMapping("/allFilms/{id}/{title}")
 	public ResponseEntity<Film> updateFilmPartially(@PathVariable int id, @PathVariable String title) {
 
-		if (!Objects.isNull(filmRepo)) {
-			Optional<Film> optFilm = filmRepo.findById(id);
-			if (optFilm.isPresent()) {
-				Film film = optFilm.get();
+			if (filmRepo.findById(id).isPresent()) {
+				Film film = filmRepo.findById(id).get();
 				film.setTitle(title);
 				return new ResponseEntity<Film>(filmRepo.save(film), HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
-		}
-
-		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 	@PutMapping("/allFilms/{id}")
 	public ResponseEntity<Film> updateFilm(@PathVariable(value = "id") int filmId,
-											 @RequestBody FilmDto filmDetailsDto) throws ResourceNotFoundException {
+											 @RequestBody Film filmDetails) throws ResourceNotFoundException {
 		Film film = filmRepo.findById(filmId)
 				.orElseThrow(() -> new ResourceNotFoundException("Film not found for this id :: " + filmId));
 
-		film.setTitle(filmDetailsDto.getFilmTitle());
-		film.setDescription(filmDetailsDto.getFilmDescription());
-		film.setLength(filmDetailsDto.getFilmLength());
-		film.setRating(filmDetailsDto.getFilmRating());
-		film.setLanguage_id(filmDetailsDto.getFilmLanguage_id());
-		film.setSpecial_features(filmDetailsDto.getFilmSpecial_features());
-		film.setReplacement_cost(filmDetailsDto.getFilmReplacement_cost());
-		film.setRental_rate(filmDetailsDto.getFilmRental_rate());
-		film.setRental_duration(filmDetailsDto.getFilmRental_duration());
+		film.setTitle(filmDetails.getTitle());
+		film.setDescription(filmDetails.getDescription());
+		film.setLength(filmDetails.getLength());
+		film.setRating(filmDetails.getRating());
+		film.setLanguage_id(filmDetails.getLanguage_id());
+		film.setSpecial_features(filmDetails.getSpecial_features());
+		film.setReplacement_cost(filmDetails.getReplacement_cost());
+		film.setRental_rate(filmDetails.getRental_rate());
+		film.setRental_duration(filmDetails.getRental_duration());
 
 		filmRepo.save(film);
 		return ResponseEntity.ok(film);
 	}
 
 	@PostMapping("/allFilms")
-	public Film createFilm(@RequestBody FilmDto filmDto) {
-		Film film = new Film();
-		film.setDescription(filmDto.getFilmDescription());
-		film.setFilmId(filmDto.getId());
-		film.setLanguage_id(filmDto.getFilmLanguage_id());
-		film.setLength(filmDto.getFilmLength());
-		film.setRating(filmDto.getFilmRating());
-		film.setRelease_year(filmDto.getFilmRelease_year());
-		film.setRental_duration(filmDto.getFilmRental_duration());
-		film.setRental_rate(filmDto.getFilmRental_rate());
-		film.setReplacement_cost(filmDto.getFilmReplacement_cost());
-		film.setSpecial_features(filmDto.getFilmSpecial_features());
-		film.setTitle(filmDto.getFilmTitle());
+	public Film createFilm(@RequestBody Film film) {
 		return filmRepo.save(film);
 	}
 
