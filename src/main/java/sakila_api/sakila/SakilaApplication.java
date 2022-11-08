@@ -36,6 +36,7 @@ public class SakilaApplication {
 	}
 	
 	private static final String ACTOR_NOT_FOUND = "Actor not found for this id :: ";
+	private static final String FILM_NOT_FOUND = "Film not found for this id :: ";
 
 	public static void main(String[] args) {
 		SpringApplication.run(SakilaApplication.class, args);
@@ -124,7 +125,7 @@ public class SakilaApplication {
 	public ResponseEntity<Film> getFilmById(@PathVariable(value = "id") int filmId)
 			throws ResourceNotFoundException {
 		Film film = filmRepo.findById(filmId)
-				.orElseThrow(() -> new ResourceNotFoundException("Film not found for this id :: " + filmId));
+				.orElseThrow(() -> new ResourceNotFoundException(FILM_NOT_FOUND + filmId));
 		return ResponseEntity.ok().body(film);
 	}
 
@@ -147,7 +148,7 @@ public class SakilaApplication {
 	public ResponseEntity<Film> updateFilm(@PathVariable(value = "id") int filmId,
 											 @RequestBody FilmDto filmDetailsDto) throws ResourceNotFoundException {
 		Film film = filmRepo.findById(filmId)
-				.orElseThrow(() -> new ResourceNotFoundException("Film not found for this id :: " + filmId));
+				.orElseThrow(() -> new ResourceNotFoundException(FILM_NOT_FOUND + filmId));
 
 		film.setTitle(filmDetailsDto.getFilmTitle());
 		film.setDescription(filmDetailsDto.getFilmDescription());
@@ -184,7 +185,7 @@ public class SakilaApplication {
 	public Map<String, Boolean> deleteFilm(@PathVariable(value = "id") int filmId)
 			throws ResourceNotFoundException {
 		Film film = filmRepo.findById(filmId)
-				.orElseThrow(() -> new ResourceNotFoundException("Film not found for this id :: " + filmId));
+				.orElseThrow(() -> new ResourceNotFoundException(FILM_NOT_FOUND + filmId));
 
 		filmRepo.delete(film);
 		Map<String, Boolean> response = new HashMap<>();
